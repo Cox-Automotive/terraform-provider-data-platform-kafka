@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
+	"math"
 )
 
 type Topics struct {
@@ -149,10 +151,23 @@ func createTopic(c Client, t *NewTopic) (*Topic, error) {
 		return nil, err
 	}
 
-	res, err := c.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
+    retryCap := 3
+    res, err := c.doRequest(req)
+    for retry := 1; retry <= retryCap; retry++{
+        if err != nil {
+            fmt.Errorf("%s\n",err)
+            fmt.Println("Waiting to retry...")
+            time.Sleep(time.Duration(math.Pow(float64(retry), 2)) * time.Second)
+            fmt.Printf("Starting retry attempt %d of %d\n", retry, retryCap)
+            res, err := c.doRequest(req)
+            _,_ = res, err
+        } else {
+            break
+        }
+    }
+    if err != nil {
+        return nil, err
+    }
 
 	var topic Topic
 	err = json.Unmarshal(res, &topic)
