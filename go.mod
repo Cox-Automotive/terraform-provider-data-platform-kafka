@@ -1,6 +1,6 @@
 module coxautoinc.com/data-platform/kafka-manager
 
-go 1.15
+go 1.16
 
 replace coxautoinc.com/data-platform/kafka-manager/client => ../client
 
