@@ -157,7 +157,7 @@ func createTopic(c Client, t *NewTopic) (*Topic, error) {
         if err != nil {
             fmt.Printf("%s\n\n",err)
             fmt.Println("Waiting to retry...")
-            time.Sleep(time.Duration(math.Pow(float64(retry), 2)) * time.Second)
+            time.Sleep(time.Duration(math.Pow(float64(retry), 2.5)) * time.Second)
             fmt.Printf("Starting retry attempt %d of %d\n", retry, retryCap)
             res, err := c.doRequest(req)
             _,_ = res, err
